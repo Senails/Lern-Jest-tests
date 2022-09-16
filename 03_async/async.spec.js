@@ -1,4 +1,7 @@
-const { Ajax } = require('./async')
+const { Ajax } = require('./async');
+const axios = require('axios');
+
+jest.mock('axios');
 
 
 describe('Ajax tests: echo', () => {
@@ -19,6 +22,28 @@ describe('Ajax tests: echo', () => {
         } catch (error) {
             expect(error.message).toBe('error')
         }
+    })
+})
+
+describe("Ajax Get", () => {
+    let res;
+    let todos;
+
+    beforeEach(() => {
+        todos = [
+            { id: 1, titel: "Todo1", completed: false }
+        ]
+        res = {
+            data: { todos }
+        }
+    })
+
+    test("shoud return data", () => {
+        axios.get.mockReturnValue(res);
+
+        return Ajax.get().then((data) => {
+            expect(data.todos).toEqual(todos)
+        })
     })
 })
 
